@@ -1,0 +1,143 @@
+<!doctype html>
+<html lang="en">
+     <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+        <link rel="stylesheet" href="https://cdn.datatables.net/1.11.0/css/jquery.dataTables.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+
+        <script src="https://code.jquery.com/jquery-3.5.1.js"></script>
+
+        <style>
+
+            #customers {
+                  font-family: Arial, Helvetica, sans-serif;
+                  border-collapse: collapse;
+                  width: 100%;
+                }
+
+                #customers td, #customers th {
+                  border: 1px solid #ddd;
+                  padding: 8px;
+                }
+
+                #customers tr:nth-child(even){background-color: #f2f2f2;}
+
+                #customers tr:hover {background-color: #ddd;}
+
+                #customers th {
+                  padding-top: 12px;
+                  padding-bottom: 12px;
+                  text-align: left;
+                  background-color: #04AA6D;
+                  color: white;
+                }
+
+        </style>
+        <script>
+            $(document).ready(function(){
+              $('#customers').hide()
+
+                    $("#uploadbtn").click(function(){
+                    //var fileslist=[]
+                    var fd = new FormData();
+                    for(var i=0;i<$('#photo')[0].files.length; i++){
+                        //fileslist.push($('#photo')[0].files[i])
+                        fd.append('file_'+i,$('#photo')[0].files[i]);
+                    }
+                    //var img = $('#photo')[0].files;
+
+
+
+                    $.ajax({
+                          type: 'POST',
+                          url: '',
+                          data: fd,
+                          contentType: false,
+                          processData: false,
+                          success: function(data){
+                          debugger
+                          
+                          $('#customers').show()
+                          for(i=0;i<=data.length;i++){
+
+                            var tr = '<tr>'+
+                                '<td>'+data[i]['one']+'</td>'+
+                                '<td>'+data[i]['two']+'</td>'+
+                                '<td>'+data[i]['three']+'</td>'+
+                                '<td>'+data[i]['four']+'</td>'+
+                                '</tr>'
+                            $('#tdata').append(tr)
+
+                            path = data.length-1
+                            $('a').attr('href',data[path])
+
+                          }
+
+
+                                },
+                            error:function(data){
+                            debugger;
+
+                                alert("Error..");
+
+                            }
+
+                            });
+
+                        });
+
+
+
+            })
+
+
+        </script>
+     </head>
+     <body>
+
+        <div class="container-fluid">
+            <h3 style="text-align: center;background-color: aquamarine;padding: 1%;">Upload</h3>
+            <!-- <a href="/logout/" style="float: right;">home</a> -->
+        </div>
+        <div class="container">
+            <div><h3 style="text-align:center">CSV Flie Upload</h3></div>
+                <div class="col-md-6 col-md-offset-2" >
+                    <input type="file" name="files" id="photo" required="true" class="form-control" accept=".csv ,text/csv" multiple>
+                </div>
+
+                <div class="col-md-2 ">
+                    <button type="submit" class="btn-success form-control" id="uploadbtn"style="">Csv upload</button>
+                </div>
+
+
+
+        </div>
+        <div id = 'table1' style=''>
+            <h3>Data</h3> <a href="" class="button">
+           <i class="fa fa-download"></i>
+              Download CV
+        </a>
+            <table id = 'customers'>
+                <thead>
+                    <th>One</th>
+                    <th>Two</th>
+                    <th>Three</th>
+                    <th>Four</th>
+                </thead>
+                <tbody  id = "tdata">
+
+                </tbody>
+
+            </table>
+
+
+
+
+        </div>
+
+     </body>
+</html>
